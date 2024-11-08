@@ -1,6 +1,12 @@
 // Your styles go here
 
 @import "variables";
+
+$background1: #0d6efd;
+$background2: #fff;
+$color: #333;
+$Width: 100%;
+$margin: 0;
 body {
   background: #202020 url("/images/footer-bg.jpg") repeat;
   min-width: 1200px;
@@ -37,6 +43,12 @@ h5 a,
 h6 a {
   color: inherit;
   text-decoration: none;
+}
+
+@mixin ulStyle {
+  margin: $margin;
+  padding: 0;
+  list-style: none;
 }
 
 strong,
@@ -134,13 +146,13 @@ footer {
 
 .row {
   margin-left: -50px;
-}
 
-.row:after {
-  content: "";
-  display: block;
-  clear: both;
-  height: 0;
+  &::after {
+    content: "";
+    display: block;
+    clear: both;
+    height: 0;
+  }
 }
 
 .column-1,
@@ -154,76 +166,44 @@ footer {
 .column-10,
 .column-11,
 .column-12 {
-  width: $maxWidth;
+  width: $Width;
 }
 
-@media all and (min-width: 576px) {
-  .column-1 {
-    width: 8.33333%;
-  }
+$column-kinds: 1 2 3 4 5 6 7 8 9 10 11 12;
 
-  .column-2 {
-    width: 16.66667%;
+@mixin make-width($Width) {
+  @media all and (min-width: 576px) {
+    width: $Width;
   }
-
-  .column-3 {
-    width: 25%;
-  }
-
-  .column-4 {
-    width: 33.33333%;
-  }
-
-  .column-5 {
-    width: 41.66667%;
-  }
-
-  .column-6 {
-    width: 50%;
-  }
-
-  .column-7 {
-    width: 58.33333%;
-  }
-
-  .column-8 {
-    width: 66.66667%;
-  }
-
-  .column-9 {
-    width: 75%;
-  }
-
-  .column-10 {
-    width: 83.33333%;
-  }
-
-  .column-11 {
-    width: 91.66667%;
-  }
-
-  .column-12 {
-    width: $maxWidth;
+}
+.column {
+  @include make-width($Width);
+  @each $kind in $column-kinds {
+    $ndx: index($column-kinds, $kind);
+    &-#{$kind} {
+      @include make-width(($Width/12) * $kind);
+    }
   }
 }
 
+@mixin make-image {
+  display: block;
+  width: $Width;
+}
 .image {
   display: inline-block;
 
   img {
-    display: block;
-    width: $maxWidth;
+    @include make-image;
   }
 
   .featured {
-    display: block;
-    width: $maxWidth;
+    @include make-image;
     margin: 0 0 2em 0;
   }
 
   .full {
-    display: block;
-    width: $maxWidth;
+    @include make-image;
     margin-bottom: 2em;
   }
 
@@ -243,9 +223,7 @@ footer {
 }
 
 ul.default {
-  margin: $margin;
-  padding: 0;
-  list-style: none;
+  @include ulStyle;
   li {
     display: block;
     padding: 2em 0em 1.25em 0em;
@@ -265,9 +243,7 @@ ul.default {
 }
 
 ul.style1 {
-  margin: $margin;
-  padding: 0;
-  list-style: none;
+  @include ulStyle;
   li {
     padding: 0.6em 0em;
     border-top: 1px solid;
@@ -280,9 +256,7 @@ ul.style1 {
 }
 
 ul.style2 {
-  margin: $margin;
-  padding: 0;
-  list-style: none;
+  @include ulStyle;
   li {
     padding: 1.9em 0em 1.6em 0em;
     border-top: 1px solid;
